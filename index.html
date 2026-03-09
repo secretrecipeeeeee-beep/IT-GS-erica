@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>IT Department Grading System</title>
+
+<style>
+
+body{
+font-family: Arial;
+background:#e9eef3;
+margin:0;
+}
+
+header{
+background:#002b5c;
+color:white;
+text-align:center;
+padding:15px;
+}
+
+.container{
+width:90%;
+margin:auto;
+margin-top:20px;
+background:white;
+padding:20px;
+border-radius:8px;
+box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+
+.form-grid{
+display:grid;
+grid-template-columns: repeat(3,1fr);
+gap:10px;
+margin-bottom:15px;
+}
+
+input{
+padding:8px;
+border:1px solid #ccc;
+border-radius:4px;
+}
+
+.buttons{
+text-align:center;
+margin-top:10px;
+}
+
+button{
+padding:8px 16px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.submit{
+background:#28a745;
+color:white;
+}
+
+.edit{
+background:#ffc107;
+}
+
+.delete{
+background:#dc3545;
+color:white;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th, td{
+border:1px solid #ccc;
+padding:10px;
+text-align:center;
+}
+
+th{
+background:#002b5c;
+color:white;
+  
+</style>
+</head>
+
+<body>
+
+<header>
+<h2>IT Department Grading System Report</h2>
+</header>
+
+<div class="container">
+
+<h3>Enter Student Grades</h3>
+
+<div class="form-grid">
+
+<input type="text" id="name" placeholder="Student Name">
+
+<input type="number" id="it4" placeholder="IT ELECT 4">
+<input type="number" id="it3" placeholder="IT ELECT 3">
+
+<input type="number" id="ias" placeholder="IAS 302">
+<input type="number" id="sa" placeholder="SA 301">
+
+<input type="number" id="sia" placeholder="SIA 302">
+<input type="number" id="cap" placeholder="Cap 1">
+
+</div>
+
+<div class="buttons">
+<button class="submit" onclick="addStudent()">Submit</button>
+</div>
+
+<table id="table">
+
+<tr>
+<th>Name</th>
+<th>IT ELECT 4</th>
+<th>IT ELECT 3</th>
+<th>IAS 302</th>
+<th>SA 301</th>
+<th>SIA 302</th>
+<th>Cap 1</th>
+<th>Average</th>
+<th>Action</th>
+</tr>
+
+</table>
+
+</div>
+
+<script>
+
+function addStudent(){
+
+let name = document.getElementById("name").value;
+let it4 = Number(document.getElementById("it4").value);
+let it3 = Number(document.getElementById("it3").value);
+let ias = Number(document.getElementById("ias").value);
+let sa = Number(document.getElementById("sa").value);
+let sia = Number(document.getElementById("sia").value);
+let cap = Number(document.getElementById("cap").value);
+
+if(name==""){
+alert("Please enter student name");
+return;
+}
+
+let avg = ((it4+it3+ias+sa+sia+cap)/6).toFixed(2);
+
+let table = document.getElementById("table");
+let row = table.insertRow();
+
+row.insertCell(0).innerHTML = name;
+row.insertCell(1).innerHTML = it4;
+row.insertCell(2).innerHTML = it3;
+row.insertCell(3).innerHTML = ias;
+row.insertCell(4).innerHTML = sa;
+row.insertCell(5).innerHTML = sia;
+row.insertCell(6).innerHTML = cap;
+row.insertCell(7).innerHTML = avg;
+
+let action = row.insertCell(8);
+
+action.innerHTML =
+"<button class='edit' onclick='editRow(this)'>Edit</button> " +
+"<button class='delete' onclick='deleteRow(this)'>Delete</button>";
+
+clearInputs();
+
+}
+
+function editRow(btn){
+
+let row = btn.parentNode.parentNode;
+
+document.getElementById("name").value = row.cells[0].innerHTML;
+document.getElementById("it4").value = row.cells[1].innerHTML;
+document.getElementById("it3").value = row.cells[2].innerHTML;
+document.getElementById("ias").value = row.cells[3].innerHTML;
+document.getElementById("sa").value = row.cells[4].innerHTML;
+document.getElementById("sia").value = row.cells[5].innerHTML;
+document.getElementById("cap").value = row.cells[6].innerHTML;
+
+row.remove();
+
+}
+
+function deleteRow(btn){
+let row = btn.parentNode.parentNode;
+row.remove();
+}
+
+function clearInputs(){
+
+document.getElementById("name").value="";
+document.getElementById("it4").value="";
+document.getElementById("it3").value="";
+document.getElementById("ias").value="";
+document.getElementById("sa").value="";
+document.getElementById("sia").value="";
+document.getElementById("cap").value="";
+
+}
+
+</script>
+
+</body>
+</html>
