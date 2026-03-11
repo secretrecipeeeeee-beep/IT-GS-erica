@@ -6,154 +6,122 @@
 <style>
 
 body{
-font-family: "Segoe UI", Arial, sans-serif;
+font-family: Arial;
+background:#e9eef3;
 margin:0;
-background:#f4f4f7;
-text-align:center;
 }
 
-.header{
-background:linear-gradient(135deg,#8e44ad,#c0392b);
+header{
+background:#002b5c;
 color:white;
-padding:40px 20px;
-box-shadow:0 4px 12px rgba(0,0,0,0.1);
-}
-
-.header h1{
-margin:0;
-font-size:36px;
-letter-spacing:2px;
-}
-
-.header p{
-margin-top:8px;
-font-size:14px;
-opacity:0.9;
+text-align:center;
+padding:15px;
 }
 
 .container{
+width:90%;
+margin:auto;
+margin-top:20px;
 background:white;
-width:720px;
-margin:40px auto;
-padding:30px;
-border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.08);
+padding:20px;
+border-radius:8px;
+box-shadow:0 0 10px rgba(0,0,0,0.2);
 }
 
-.form-row{
-display:flex;
-justify-content:center;
-gap:15px;
+.form-grid{
+display:grid;
+grid-template-columns: repeat(3,1fr);
+gap:10px;
 margin-bottom:15px;
-flex-wrap:wrap;
 }
 
 input{
-padding:12px;
-border:1px solid #ddd;
-border-radius:8px;
-width:160px;
-background:#fafafa;
-font-size:14px;
+padding:8px;
+border:1px solid #ccc;
+border-radius:4px;
 }
 
-#name{
-width:350px;
-font-weight:bold;
+.buttons{
+text-align:center;
+margin-top:10px;
 }
 
-.submit-btn{
-background:#8e44ad;
-color:white;
-padding:12px 28px;
+button{
+padding:8px 16px;
 border:none;
-border-radius:8px;
+border-radius:5px;
 cursor:pointer;
-font-size:15px;
 font-weight:bold;
 }
 
-.submit-btn:hover{
-background:#732d91;
+.submit{
+background:#28a745;
+color:white;
+}
+
+.edit{
+background:#ffc107;
+}
+
+.delete{
+background:#dc3545;
+color:white;
 }
 
 table{
-width:90%;
-margin:30px auto;
+width:100%;
 border-collapse:collapse;
-background:white;
-border-radius:10px;
-overflow:hidden;
-box-shadow:0 5px 15px rgba(0,0,0,0.08);
+margin-top:20px;
+}
+
+th, td{
+border:1px solid #ccc;
+padding:10px;
+text-align:center;
 }
 
 th{
-background:#8e44ad;
+background:#002b5c;
 color:white;
-padding:12px;
-}
-
-td{
-padding:10px;
-border-bottom:1px solid #eee;
-}
-
-.edit-btn{
-background:#f39c12;
-color:white;
-border:none;
-padding:6px 12px;
-border-radius:6px;
-cursor:pointer;
-}
-
-.delete-btn{
-background:#e74c3c;
-color:white;
-border:none;
-padding:6px 12px;
-border-radius:6px;
-cursor:pointer;
-}
-
+  
 </style>
 </head>
 
 <body>
 
-<div class="header">
-<h1>IT Department Grading System</h1>
-<p>Student Performance Management</p>
-</div>
+<header>
+<h2>IT Department Grading System Report</h2>
+</header>
 
 <div class="container">
 
-<div class="form-row">
+<h3>Enter Student Grades</h3>
+
+<div class="form-grid">
+
 <input type="text" id="name" placeholder="Student Name">
-</div>
 
-<div class="form-row">
-<input type="number" id="elec4" placeholder="IT ELEC 4">
-<input type="number" id="elec3" placeholder="IT ELEC 3">
+<input type="number" id="it4" placeholder="IT ELECT 4">
+<input type="number" id="it3" placeholder="IT ELECT 3">
+
 <input type="number" id="ias" placeholder="IAS 302">
-</div>
-
-<div class="form-row">
 <input type="number" id="sa" placeholder="SA 301">
+
 <input type="number" id="sia" placeholder="SIA 302">
 <input type="number" id="cap" placeholder="Cap 1">
+
 </div>
 
-<button class="submit-btn" onclick="saveStudent()">Submit</button>
-
+<div class="buttons">
+<button class="submit" onclick="addStudent()">Submit</button>
 </div>
 
 <table id="table">
 
 <tr>
 <th>Name</th>
-<th>IT ELEC 4</th>
-<th>IT ELEC 3</th>
+<th>IT ELECT 4</th>
+<th>IT ELECT 3</th>
 <th>IAS 302</th>
 <th>SA 301</th>
 <th>SIA 302</th>
@@ -164,146 +132,81 @@ cursor:pointer;
 
 </table>
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</div>
 
-<script type="module">
+<script>
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+function addStudent(){
 
-import {
-getFirestore,
-collection,
-addDoc,
-getDocs,
-doc,
-updateDoc,
-deleteDoc
-} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
-
-const firebaseConfig = {
-apiKey: "AIzaSyBHxReUCVIB0Pk5EulBE_pgv4atr3YVWQM",
-authDomain: "lara-ce0e0.firebaseapp.com",
-projectId: "lara-ce0e0",
-storageBucket: "lara-ce0e0.firebasestorage.app",
-messagingSenderId: "773220413950",
-appId: "1:773220413950:web:f84269bdab0bf7b54a50af"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-let editID = null;
-
-window.saveStudent = async function(){
-
-let name=document.getElementById("name").value
-let elec4=document.getElementById("elec4").value
-let elec3=document.getElementById("elec3").value
-let ias=document.getElementById("ias").value
-let sa=document.getElementById("sa").value
-let sia=document.getElementById("sia").value
-let cap=document.getElementById("cap").value
+let name = document.getElementById("name").value;
+let it4 = Number(document.getElementById("it4").value);
+let it3 = Number(document.getElementById("it3").value);
+let ias = Number(document.getElementById("ias").value);
+let sa = Number(document.getElementById("sa").value);
+let sia = Number(document.getElementById("sia").value);
+let cap = Number(document.getElementById("cap").value);
 
 if(name==""){
-alert("Enter student name")
-return
+alert("Please enter student name");
+return;
 }
 
-let avg=(Number(elec4)+Number(elec3)+Number(ias)+Number(sa)+Number(sia)+Number(cap))/6
+let avg = ((it4+it3+ias+sa+sia+cap)/6).toFixed(2);
 
-if(editID==null){
+let table = document.getElementById("table");
+let row = table.insertRow();
 
-await addDoc(collection(db,"students"),{
-name,elec4,elec3,ias,sa,sia,cap,avg
-})
+row.insertCell(0).innerHTML = name;
+row.insertCell(1).innerHTML = it4;
+row.insertCell(2).innerHTML = it3;
+row.insertCell(3).innerHTML = ias;
+row.insertCell(4).innerHTML = sa;
+row.insertCell(5).innerHTML = sia;
+row.insertCell(6).innerHTML = cap;
+row.insertCell(7).innerHTML = avg;
 
-}else{
+let action = row.insertCell(8);
 
-await updateDoc(doc(db,"students",editID),{
-name,elec4,elec3,ias,sa,sia,cap,avg
-})
+action.innerHTML =
+"<button class='edit' onclick='editRow(this)'>Edit</button> " +
+"<button class='delete' onclick='deleteRow(this)'>Delete</button>";
 
-editID=null
-}
-
-loadStudents()
-
-document.querySelectorAll("input").forEach(i=>i.value="")
-
-confetti({
-particleCount:120,
-spread:70,
-origin:{y:0.6}
-})
+clearInputs();
 
 }
 
-async function loadStudents(){
+function editRow(btn){
 
-let table=document.getElementById("table")
+let row = btn.parentNode.parentNode;
 
-table.innerHTML=
-`
-<tr>
-<th>Name</th>
-<th>IT ELEC 4</th>
-<th>IT ELEC 3</th>
-<th>IAS 302</th>
-<th>SA 301</th>
-<th>SIA 302</th>
-<th>Cap 1</th>
-<th>Average</th>
-<th>Action</th>
-</tr>
-`
+document.getElementById("name").value = row.cells[0].innerHTML;
+document.getElementById("it4").value = row.cells[1].innerHTML;
+document.getElementById("it3").value = row.cells[2].innerHTML;
+document.getElementById("ias").value = row.cells[3].innerHTML;
+document.getElementById("sa").value = row.cells[4].innerHTML;
+document.getElementById("sia").value = row.cells[5].innerHTML;
+document.getElementById("cap").value = row.cells[6].innerHTML;
 
-const querySnapshot=await getDocs(collection(db,"students"))
-
-querySnapshot.forEach((docSnap)=>{
-
-let s=docSnap.data()
-
-let row=table.insertRow()
-
-row.insertCell(0).innerHTML=s.name
-row.insertCell(1).innerHTML=s.elec4
-row.insertCell(2).innerHTML=s.elec3
-row.insertCell(3).innerHTML=s.ias
-row.insertCell(4).innerHTML=s.sa
-row.insertCell(5).innerHTML=s.sia
-row.insertCell(6).innerHTML=s.cap
-row.insertCell(7).innerHTML=Number(s.avg).toFixed(2)
-
-row.insertCell(8).innerHTML=
-`<button class="edit-btn" onclick="editStudent('${docSnap.id}','${s.name}','${s.elec4}','${s.elec3}','${s.ias}','${s.sa}','${s.sia}','${s.cap}')">Edit</button>
-<button class="delete-btn" onclick="deleteStudent('${docSnap.id}')">Delete</button>`
-
-})
+row.remove();
 
 }
 
-window.editStudent=function(id,name,elec4,elec3,ias,sa,sia,cap){
-
-editID=id
-
-document.getElementById("name").value=name
-document.getElementById("elec4").value=elec4
-document.getElementById("elec3").value=elec3
-document.getElementById("ias").value=ias
-document.getElementById("sa").value=sa
-document.getElementById("sia").value=sia
-document.getElementById("cap").value=cap
-
+function deleteRow(btn){
+let row = btn.parentNode.parentNode;
+row.remove();
 }
 
-window.deleteStudent=async function(id){
+function clearInputs(){
 
-await deleteDoc(doc(db,"students",id))
-loadStudents()
+document.getElementById("name").value="";
+document.getElementById("it4").value="";
+document.getElementById("it3").value="";
+document.getElementById("ias").value="";
+document.getElementById("sa").value="";
+document.getElementById("sia").value="";
+document.getElementById("cap").value="";
 
 }
-
-loadStudents()
 
 </script>
 
